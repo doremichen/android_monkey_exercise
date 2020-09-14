@@ -1,0 +1,9 @@
+2020-09-14 13:33:00 : INFO -------------- Begin --------------
+2020-09-14 13:33:24 : INFO [findViewByViewClientWithText] View is not found by text: Done
+2020-09-14 13:33:27 : INFO [findViewByViewClientWithText] View is not found by text: Done
+2020-09-14 13:33:36 : INFO [findViewByViewClientWithText] View is not found by text: Fill
+2020-09-14 13:33:39 : INFO [findViewByViewClientWithText] View is not found by text: Fill
+2020-09-14 13:33:45 : INFO [findViewByViewClientWithText] View is not found by text: OK
+2020-09-14 13:33:54 : INFO [findViewByViewClientWithText] View is not found by text: Activate basal rate profile
+2020-09-14 13:33:57 : INFO [findViewByViewClientWithText] View is not found by text: Activate basal rate profile
+2020-09-14 13:34:06 : INFO -------------- End --------------

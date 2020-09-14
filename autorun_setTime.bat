@@ -1,6 +1,6 @@
 @echo off
 
-set RUN_FILE=Unlock.py
+set RUN_FILE=SetTime.py
 
 echo =================
 echo     %RUN_FILE%

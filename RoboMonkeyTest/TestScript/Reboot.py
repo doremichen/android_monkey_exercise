@@ -31,50 +31,35 @@ def main():
     vc = ViewClient(device=device, serialno='0123456789ABCDEF', adb=None)
 
     print('start!!!')
-    device.wake()
-    
-    print('drag screen lock slide!!!')
-    device.drag((160, 440), (320, 440), 0.5, 1)
-    time.sleep(1)
-    print('unlock pin code')
-    id_0 = getViewId(vc, u'0')
-    print('id_o = ' + str(id_0))
-    touchButton(vc, id_0)
-    touchButton(vc, id_0)
-    touchButton(vc, id_0)
-    touchButton(vc, id_0)
-    id_ok = getViewId(vc, u'OK')
-    print('id_ok = ' + str(id_ok))
-    touchButton(vc, id_ok)
-    
-    print('Add data')
-    id_addData = getViewId(vc, u'Add data')
-    print('id_addData = ' + str(id_addData))
-    touchButton(vc, id_addData)
-    print('drag !!!')
-    time.sleep(1)
-    scrollUpFling(device)
-    print('Note')
-    time.sleep(1)
-    id_Note = getViewId(vc, u'Note')
-    print('id_Note = ' + str(id_Note))
-    touchButton(vc, id_Note)
-    time.sleep(1)
-    device.type("123456789!!!")
-    time.sleep(1)
-    touchButtonByPosition(device, 288, 50)
-    print('Save')
-    id_Save = getViewId(vc, u'Save')
-    print('id_Save = ' + str(id_Save))
-    touchButton(vc, id_Save)
-    
+    device.reboot()
+    print('reboot')
     
     logging.info('-------------- End --------------')
 
 #==================================================
 ###################################################
 # Function
-###################################################  
+###################################################
+# def testViewClient():
+#     logging.info('[testViewClient] .....start')
+#     print('[testViewClient] .....start')
+#     print('start')
+#     touchButton(u'Main menu')
+#     touchButton(u'My data')
+#     touchButton(u'System events')
+#     time.sleep(1)
+#     gDev.press('KEYCODE_BACK')
+#     time.sleep(1)
+#     gDev.press('KEYCODE_BACK')
+#     time.sleep(1)
+#     gDev.press('KEYCODE_BACK')
+#     print('test device touch...')
+#     gVc.dump()
+#     gVc.touch(53, 455)
+#     # gDev.touch(53, 455, MonkeyDevice.DOWN_AND_UP)
+#     print('[testViewClient] .....end')
+#     logging.info('[testViewClient] .....end')
+#     
 def scrollUpFling(device):
     device.touch(160, 391, MonkeyDevice.DOWN)
     device.touch(160, 246, MonkeyDevice.MOVE)
@@ -82,25 +67,24 @@ def scrollUpFling(device):
     print('Fling up')
 
 def getViewId(vc, text):
-    id = 0
-    while id == 0:
-        vc.dump()
-        try:
-            b = vc.findViewWithTextOrRaise(text)
-            id = b.getId()
-        except:
-            print('[findViewByViewClientWithText] View is not found by text: %s\n', text)
-            logging.info('[findViewByViewClientWithText] View is not found by text: ' + text)
-            id = 0
-    return id
+    vc.dump()
+    try:
+        b = vc.findViewWithTextOrRaise(text)
+        return b.getId()
+    except:
+        print('[findViewByViewClientWithText] View is not found by text: %s\n', text)
+        logging.info('[findViewByViewClientWithText] View is not found by text: ' + text)
+        return 0;
 
-def touchButton(vc, id):
+def touchButton(vc, id, delay=1):
+     vc.dump()
      try:
         b = vc.findViewByIdOrRaise(id)
         b.touch()
      except:
         print('[findViewByViewClientWithText] View is not found by id: %d\n',id)
         logging.info('[findViewByViewClientWithText] View is not found by id: ' + str(id))
+     time.sleep(delay)
      
 def touchButtonByPosition(device, x, y, delay=1):
     try:

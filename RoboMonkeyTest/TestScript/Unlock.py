@@ -31,9 +31,7 @@ def main():
     vc = ViewClient(device=device, serialno='0123456789ABCDEF', adb=None)
 
     print('start!!!')
-
-    global gDevice
-    gDevice = device
+    device.wake()
     
     print('drag screen lock slide!!!')
     device.drag((160, 440), (320, 440), 0.5, 1)
@@ -55,39 +53,22 @@ def main():
 ###################################################
 # Function
 ###################################################
-# def testViewClient():
-#     logging.info('[testViewClient] .....start')
-#     print('[testViewClient] .....start')
-#     print('start')
-#     touchButton(u'Main menu')
-#     touchButton(u'My data')
-#     touchButton(u'System events')
-#     time.sleep(1)
-#     gDev.press('KEYCODE_BACK')
-#     time.sleep(1)
-#     gDev.press('KEYCODE_BACK')
-#     time.sleep(1)
-#     gDev.press('KEYCODE_BACK')
-#     print('test device touch...')
-#     gVc.dump()
-#     gVc.touch(53, 455)
-#     # gDev.touch(53, 455, MonkeyDevice.DOWN_AND_UP)
-#     print('[testViewClient] .....end')
-#     logging.info('[testViewClient] .....end')
-#     
 
 def getViewId(vc, text):
-    vc.dump()
-    try:
-        b = vc.findViewWithTextOrRaise(text)
-        return b.getId()
-    except:
-        print('[findViewByViewClientWithText] View is not found by text: %s\n', text)
-        logging.info('[findViewByViewClientWithText] View is not found by text: ' + text)
-        return 0;
+    id = 0
+    while id == 0:
+        vc.dump()
+        try:
+            b = vc.findViewWithTextOrRaise(text)
+            id = b.getId()
+        except:
+            print('[findViewByViewClientWithText] View is not found by text: %s\n', text)
+            logging.info('[findViewByViewClientWithText] View is not found by text: ' + text)
+            id = 0
+    return id
+
 
 def touchButton(vc, id):
-     vc.dump()
      try:
         b = vc.findViewByIdOrRaise(id)
         b.touch()

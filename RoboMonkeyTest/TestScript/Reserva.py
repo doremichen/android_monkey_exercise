@@ -22,7 +22,7 @@ def main():
             level=logging.DEBUG, 
             format='%(asctime)s : %(levelname)s %(message)s',
             datefmt='%Y-%m-%d %H:%M:%S',
-            filename='Note.log',
+            filename='Reservior.log',
             filemode='w')
 
     logging.info('-------------- Begin --------------')
@@ -33,53 +33,51 @@ def main():
     print('start!!!')
     device.wake()
     
-    print('drag screen lock slide!!!')
-    device.drag((160, 440), (320, 440), 0.5, 1)
-    time.sleep(1)
-    print('unlock pin code')
-    id_0 = getViewId(vc, u'0')
-    print('id_o = ' + str(id_0))
-    touchButton(vc, id_0)
-    touchButton(vc, id_0)
-    touchButton(vc, id_0)
-    touchButton(vc, id_0)
+    # Go to main menu
+    id_main = getViewId(vc, u'Main menu')
+    touchButton(vc, id_main)
+    # Replacement
+    id_replace = getViewId(vc, u'Replace')
+    touchButton(vc, id_replace)
+    # Select Reservoir
+    id_Reservior = getViewId(vc, u'Reservoir')
+    touchButton(vc, id_Reservior)
+    # press Replace button
+    id_replace = getViewId(vc, u'Replace')
+    touchButton(vc, id_replace)
+    # press Done button
+    id_done = getViewId(vc, u'Done')
+    touchButton(vc, id_done)
+    # press Done button
+    id_done = getViewId(vc, u'Done')
+    touchButton(vc, id_done)
+    # press Save button
+    id_save = getViewId(vc, u'Save')
+    touchButton(vc, id_save)
+    # press Fill button
+    id_fill = getViewId(vc, u'Fill')
+    touchButton(vc, id_fill)
+    # press OK button
     id_ok = getViewId(vc, u'OK')
-    print('id_ok = ' + str(id_ok))
     touchButton(vc, id_ok)
+    # press Next button
+    id_next = getViewId(vc, u'Next')
+    touchButton(vc, id_next)
+    # insulin button pressed
+    getViewId(vc, u'Activate basal rate profile')
+    device.press('KEYCODE_F10', MonkeyDevice.DOWN_AND_UP)
+    time.sleep(5)
     
-    print('Add data')
-    id_addData = getViewId(vc, u'Add data')
-    print('id_addData = ' + str(id_addData))
-    touchButton(vc, id_addData)
-    print('drag !!!')
-    time.sleep(1)
-    scrollUpFling(device)
-    print('Note')
-    time.sleep(1)
-    id_Note = getViewId(vc, u'Note')
-    print('id_Note = ' + str(id_Note))
-    touchButton(vc, id_Note)
-    time.sleep(1)
-    device.type("123456789!!!")
-    time.sleep(1)
-    touchButtonByPosition(device, 288, 50)
-    print('Save')
-    id_Save = getViewId(vc, u'Save')
-    print('id_Save = ' + str(id_Save))
-    touchButton(vc, id_Save)
-    
-    
+    print('end!!!')
     logging.info('-------------- End --------------')
 
 #==================================================
 ###################################################
 # Function
-###################################################  
-def scrollUpFling(device):
-    device.touch(160, 391, MonkeyDevice.DOWN)
-    device.touch(160, 246, MonkeyDevice.MOVE)
-    device.touch(160, 246, MonkeyDevice.UP)
-    print('Fling up')
+###################################################
+def getDateInfo(device, cmd):
+    value = device.shell(cmd)
+    return value.encode('utf-8')
 
 def getViewId(vc, text):
     id = 0
@@ -101,13 +99,10 @@ def touchButton(vc, id):
      except:
         print('[findViewByViewClientWithText] View is not found by id: %d\n',id)
         logging.info('[findViewByViewClientWithText] View is not found by id: ' + str(id))
-     
-def touchButtonByPosition(device, x, y, delay=1):
-    try:
-        device.touch(x, y, MonkeyDevice.DOWN_AND_UP)
-    except:
-        print('[findViewByViewClientWithText] no button in the position %d %d\n', x, y)
-    time.sleep(delay)
+
+def touchPosition(device, x, y):
+    device.touch(x, y, MonkeyDevice.DOWN_AND_UP)
+    time.sleep(1)
 
 if __name__ == '__main__':
     main()
