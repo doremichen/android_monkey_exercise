@@ -22,7 +22,7 @@ def main():
             level=logging.DEBUG, 
             format='%(asctime)s : %(levelname)s %(message)s',
             datefmt='%Y-%m-%d %H:%M:%S',
-            filename='Reservior.log',
+            filename='MenualBolus.log',
             filemode='w')
 
     logging.info('-------------- Begin --------------')
@@ -49,48 +49,24 @@ def main():
     
     print('Go to main menu')
     touchButtonByText(vc, u'Main menu')
-    print('Go to Replacement')
-    touchButtonByText(vc, u'Replace')
-    print('Select Pump base')
-    touchButtonByText(vc, u'Pump base')
-    print('press Replace button')
-    touchButtonByText(vc, u'Replace')
-    print('press Yes button of remove pump base info')
-    touchButtonByText(vc, u'Yes')
-    print('press Done button of sidpose system component info')
-    touchButtonByText(vc, u'Done')
-    print('press ok button of w85')
-    touchButtonByText(vc, u'OK')
-    print('press Done button of prepare micropump')
-    touchButtonByText(vc, u'Done')
-    print('press save button of reservior amount')
-    touchButtonByText(vc, u'Save')
-    print('press next button of paire pump')
-    touchButtonByText(vc, u'Next')
-    print('select enter pump keys')
-    touchButtonByText(vc, u'Enter pump key')
-    print('select pump serial number')
-    touchButtonByText(vc, u'GW11111111')
-    # input pin number
-    print('input pin number')
-    getViewId(vc, u'Enter pump key')
-    touchPosition(device, 200, 100)
-    time.sleep(2)
-    device.type("00000000")
-    touchPosition(device, 200, 150)
-    touchPosition(device, 280, 40)
-    time.sleep(3)
-    print('press Fill button')
-    touchButtonByText(vc, u'Fill')
-    print('press OK button')
-    touchButtonByText(vc, u'OK')
-    print('press Next button')
-    touchButtonByText(vc, u'Next')
-    print('insulin button pressed')
-    getViewId(vc, u'Activate basal rate profile')
+    print('Go to Bolus')
+    touchButtonByText(vc, u'Bolus')
+    print('Select manual bolus')
+    touchButtonByText(vc, u'Manual bolus')
+    print('press total amount')
+    touchButtonByText(vc, u'Total amount')
+    print('adjust amount value')
+    for i in range(30):
+        touchPosition(device, 260, 280)
+    print('press ok button')
+    touchPosition(device, 300, 450)
+    print('press Bolus')
+    touchButtonByText(vc, u'Bolus')
+    print('Deliver insulin')
+    getViewId(vc, u'Deliver insulin')
+    print('press insulin')
     device.press('KEYCODE_F10', MonkeyDevice.DOWN_AND_UP)
-    time.sleep(5)
-    
+    time.sleep(3)
     print('end!!!')
     logging.info('-------------- End --------------')
 
@@ -114,6 +90,7 @@ def touchButtonByText(vc, text):
             print('[findViewByViewClientWithText] View is not found by text: %s\n', text)
             logging.info('[findViewByViewClientWithText] View is not found by text: ' + text)
             id = 0
+        
 
 
 def getViewId(vc, text):
