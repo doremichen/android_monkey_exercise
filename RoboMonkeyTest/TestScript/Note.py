@@ -84,8 +84,8 @@ def scrollUpFling(device):
 def getViewId(vc, text):
     id = 0
     while id == 0:
-        vc.dump()
         try:
+            vc.dump()
             b = vc.findViewWithTextOrRaise(text)
             id = b.getId()
         except:

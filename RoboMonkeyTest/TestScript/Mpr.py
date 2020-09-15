@@ -33,37 +33,60 @@ def main():
     print('start!!!')
     device.wake()
     
-    # Go to main menu
-    id_main = getViewId(vc, u'Main menu')
-    touchButton(vc, id_main)
-    # Replacement
-    id_replace = getViewId(vc, u'Replace')
-    touchButton(vc, id_replace)
-    # Select Reservoir
-    id_Reservior = getViewId(vc, u'Reservoir')
-    touchButton(vc, id_Reservior)
-    # press Replace button
-    id_replace = getViewId(vc, u'Replace')
-    touchButton(vc, id_replace)
-    # press Done button
-    id_done = getViewId(vc, u'Done')
-    touchButton(vc, id_done)
-    # press Done button
-    id_done = getViewId(vc, u'Done')
-    touchButton(vc, id_done)
-    # press Save button
-    id_save = getViewId(vc, u'Save')
-    touchButton(vc, id_save)
-    # press Fill button
-    id_fill = getViewId(vc, u'Fill')
-    touchButton(vc, id_fill)
-    # press OK button
+    print('drag screen lock slide!!!')
+    device.drag((160, 440), (320, 440), 0.5, 1)
+    time.sleep(1)
+    print('unlock pin code')
+    id_0 = getViewId(vc, u'0')
+    print('id_o = ' + str(id_0))
+    touchButton(vc, id_0)
+    touchButton(vc, id_0)
+    touchButton(vc, id_0)
+    touchButton(vc, id_0)
     id_ok = getViewId(vc, u'OK')
+    print('id_ok = ' + str(id_ok))
     touchButton(vc, id_ok)
-    # press Next button
-    id_next = getViewId(vc, u'Next')
-    touchButton(vc, id_next)
-    # insulin button pressed
+    
+    print('Go to main menu')
+    touchButtonByText(vc, u'Main menu')
+    print('Go to Replacement')
+    touchButtonByText(vc, u'Replace')
+    print('Select Pump base')
+    touchButtonByText(vc, u'Pump base')
+    print('press Replace button')
+    touchButtonByText(vc, u'Replace')
+    print('press Yes button of remove pump base info')
+    touchButtonByText(vc, u'Yes')
+    print('press Done button of sidpose system component info')
+    touchButtonByText(vc, u'Done')
+    print('press ok button of w85')
+    touchButtonByText(vc, u'OK')
+    print('press Done button of prepare micropump')
+    touchButtonByText(vc, u'Done')
+    print('press save button of reservior amount')
+    touchButtonByText(vc, u'Save')
+    print('press next button of paire pump')
+    touchButtonByText(vc, u'Next')
+    print('select enter pump keys')
+    touchButtonByText(vc, u'Enter pump key')
+    print('select pump serial number')
+    touchButtonByText(vc, u'GW11111111')
+    # input pin number
+    print('input pin number')
+    getViewId(vc, u'Enter pump key')
+    touchPosition(device, 200, 100)
+    time.sleep(2)
+    device.type("00000000")
+    touchPosition(device, 200, 150)
+    touchPosition(device, 280, 40)
+    time.sleep(3)
+    print('press Fill button')
+    touchButtonByText(vc, u'Fill')
+    print('press OK button')
+    touchButtonByText(vc, u'OK')
+    print('press Next button')
+    touchButtonByText(vc, u'Next')
+    print('insulin button pressed')
     getViewId(vc, u'Activate basal rate profile')
     device.press('KEYCODE_F10', MonkeyDevice.DOWN_AND_UP)
     time.sleep(5)
@@ -79,11 +102,25 @@ def getDateInfo(device, cmd):
     value = device.shell(cmd)
     return value.encode('utf-8')
 
+def touchButtonByText(vc, text):
+    id = 0
+    while id == 0:
+        vc.dump(window=-1)
+        try:
+            b = vc.findViewWithTextOrRaise(text)
+            id = b.getId()
+            b.touch()
+        except:
+            print('[findViewByViewClientWithText] View is not found by text: %s\n', text)
+            logging.info('[findViewByViewClientWithText] View is not found by text: ' + text)
+        time.sleep(1)
+
+
 def getViewId(vc, text):
     id = 0
     while id == 0:
         try:
-            vc.dump()
+            vc.dump(window=-1)
             b = vc.findViewWithTextOrRaise(text)
             id = b.getId()
         except:
