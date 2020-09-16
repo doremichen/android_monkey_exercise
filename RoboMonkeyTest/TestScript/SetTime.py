@@ -46,33 +46,45 @@ def main():
     id_ok = getViewId(vc, u'OK')
     print('id_ok = ' + str(id_ok))
     touchButton(vc, id_ok)
-    
-    
+    time.sleep(1)
     # Go to main menu
     id_main = getViewId(vc, u'Main menu')
     touchButton(vc, id_main)
+    time.sleep(1)
     # Settings
     id_settings = getViewId(vc, u'Settings')
     touchButton(vc, id_settings)
+    time.sleep(1)
     # Time and date
     id_TimeAndDate = getViewId(vc, u'Time and date')
     touchButton(vc, id_TimeAndDate)
+    time.sleep(1)
     # set time format
     id_tf = getViewId(vc, u'Time format')
     touchButton(vc, id_tf)
+    time.sleep(1)
     setFormat(vc)
-    # set time
-    id_setTime = getViewId(vc, u'Time')
-    touchButton(vc, id_setTime)
-    setTime(device)
+    time.sleep(1)
     # set date
     id_setDate = getViewId(vc, u'Date')
     touchButton(vc, id_setDate)
+    time.sleep(1)
     setDate(device)
+    time.sleep(1)
+    # set time
+    id_setTime = getViewId(vc, u'Time')
+    touchButton(vc, id_setTime)
+    time.sleep(1)
+    setTime(device)
+    time.sleep(1)
     # press OK button
     id_ok = getViewId(vc, u'OK')
     touchButton(vc, id_ok)
-
+    # Go to status screen
+    getViewId(vc, u'Settings')
+    device.press('KEYCODE_BACK', MonkeyDevice.DOWN_AND_UP)
+    time.sleep(1)
+    device.press('KEYCODE_BACK', MonkeyDevice.DOWN_AND_UP)
     print('end!!!')
     logging.info('-------------- End --------------')
 
@@ -89,58 +101,51 @@ def setFormat(vc):
 
 
 def setTime(device):
-    hour = getDateInfo(device, "date +%H")
-    min = getDateInfo(device, "date +%M")
-
+    
     # hour comparsion
+    touchPosition(device, 100, 220)
+    hour = getDateInfo(device, "date +%H")
     if int(hour) < datetime.datetime.today().hour:
         hourRange = datetime.datetime.today().hour - int(hour)
         increase = 1
     else:
         hourRange = int(hour) - datetime.datetime.today().hour
         increase = 0
-
     for i in range(hourRange):
         if increase == 1:
-            touchPosition(device, 280, 230)
-        else:
-            touchPosition(device, 20, 230)
-            
+            touchPosition(device, 280, 250)
+        elif increase == 0:
+            touchPosition(device, 50, 250)
+    time.sleep(1)
     # minute comparsion
     touchPosition(device, 180, 220)
-    
+    min = getDateInfo(device, "date +%M")
     if int(min) < datetime.datetime.today().minute:
         minRange = datetime.datetime.today().minute - int(min)
         increase = 1
     else:
         minRange = int(min) - datetime.datetime.today().minute
         increase = 0
-
     for i in range(minRange):
         if increase == 1:
-            touchPosition(device, 280, 230)
-        else:
-            touchPosition(device, 20, 230)
-            
+            touchPosition(device, 280, 250)
+        elif increase == 0:
+            touchPosition(device, 50, 250)
+    time.sleep(1)
     # footer button pressed
     touchPosition(device, 20, 450)
 
 def setDate(device):
 
-    year = getDateInfo(device, "date +%Y")
-    month = getDateInfo(device, "date +%m")
-    day = getDateInfo(device, "date +%d")
-
     # month
     touchPosition(device, 160, 220)
-    
+    month = getDateInfo(device, "date +%m")
     if int(month) < datetime.datetime.today().month:
         monthRange = datetime.datetime.today().month - int(month)
         increase = 1
     else:
         monthRange = int(month) - datetime.datetime.today().month
         increase = 0
-
     for i in range(monthRange):
         if increase == 1:
             # + button pressed
@@ -151,7 +156,7 @@ def setDate(device):
             
     # day comparsion
     touchPosition(device, 160, 140)
-    
+    day = getDateInfo(device, "date +%d")
     if int(day) < datetime.datetime.today().day:
         dayRange = datetime.datetime.today().day - int(day)
         increase = 1
@@ -170,7 +175,7 @@ def setDate(device):
     
     # year comparsion
     touchPosition(device, 160, 300)
-    
+    year = getDateInfo(device, "date +%Y")
     if int(year) < datetime.datetime.today().year:
         yearRange = datetime.datetime.today().year - int(year)
         increase = 1
@@ -213,9 +218,9 @@ def touchButton(vc, id):
         print('[findViewByViewClientWithText] View is not found by id: %d\n',id)
         logging.info('[findViewByViewClientWithText] View is not found by id: ' + str(id))
 
-def touchPosition(device, x, y):
+def touchPosition(device, x, y, delay=1):
     device.touch(x, y, MonkeyDevice.DOWN_AND_UP)
-    time.sleep(1)
+    time.sleep(delay)
 
 if __name__ == '__main__':
     main()
