@@ -32,10 +32,14 @@ def main():
 
     print('start!!!')
     
+    logging.info('-------------- Start --------------')
+    i = 0;
     while True:
+        logging.info("count: %d" %(i))
         print(shellCmd(device, "date +%M"))
         device.press("KEYCODE_POWER","DOWN_AND_UP")
         time.sleep(1)
+        i = i + 1
     
     
     logging.info('-------------- End --------------')
