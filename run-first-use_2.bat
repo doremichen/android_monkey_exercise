@@ -10,7 +10,7 @@ echo Start to auto-run
 echo =================
 echo.
 cd Android_sdk\tools
-ping -n 2 127.0.0.1 -w 1000>NUL
+@ping -n 1 127.0.0.1 -w 1000>NUL
 
 :firstUse
 echo %date%-%time% Set auto test mode

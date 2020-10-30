@@ -144,7 +144,7 @@ def setWarningLimits():
     # press upper warning limit
     touchPosition(gDevice, 200, 100)
     time.sleep(1)
-    for i in range(10):
+    for i in range(5):
         touchPosition(gDevice, 280, 250)
     time.sleep(1)
     # press Ok button
@@ -167,12 +167,12 @@ def setBASettings():
     # hour
     touchPosition(gDevice, 100, 250)
     # press plus button
-    for i in range(10):
+    for i in range(5):
         touchPosition(gDevice, 300, 250)
     # min
     touchPosition(gDevice, 200, 250)
     # press plus button
-    for i in range(10):
+    for i in range(2):
         touchPosition(gDevice, 300, 250)
     # press ok
     touchPosition(gDevice, 160, 450)
@@ -207,14 +207,14 @@ def setBASettings():
     # Execercise 1
     touchPosition(gDevice, 300, 100)
     # press plus button
-    for i in range(6):
+    for i in range(5):
         touchPosition(gDevice, 280, 250)
     # press ok 
     touchPosition(gDevice, 160, 450)
     # illness
     touchPosition(gDevice, 300, 300)
     # press plus button
-    for i in range(7):
+    for i in range(5):
         touchPosition(gDevice, 280, 250)
     # press ok 
     touchPosition(gDevice, 160, 450)
@@ -224,7 +224,7 @@ def setBASettings():
     # bolus advice options - snack size
     touchPosition(gDevice, 280, 180)
     # press plus button
-    for i in range(7):
+    for i in range(3):
         touchPosition(gDevice, 280, 250)
     # press ok 
     touchPosition(gDevice, 160, 450)
@@ -251,7 +251,7 @@ def setBasalRateProfile():
     touchPosition(gDevice, 200, 430)
     # insulin of BR profile 1
     touchPosition(gDevice, 280, 245)
-    for i in range(7):
+    for i in range(5):
         touchPosition(gDevice, 280, 230)
     touchPosition(gDevice, 160, 450)
     time.sleep(1)

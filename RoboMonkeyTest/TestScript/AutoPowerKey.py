@@ -38,7 +38,7 @@ def main():
         logging.info("count: %d" % i)
         print("count: %d" % i)
         device.press("KEYCODE_POWER","DOWN_AND_UP")
-        time.sleep(1)
+        time.sleep(3)
         i = i + 1
     
     
