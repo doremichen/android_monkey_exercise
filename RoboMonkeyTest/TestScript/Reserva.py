@@ -33,6 +33,20 @@ def main():
     print('start!!!')
     device.wake()
     
+    print('drag screen lock slide!!!')
+    device.drag((160, 440), (320, 440), 0.5, 1)
+    time.sleep(1)
+    print('unlock pin code')
+    id_0 = getViewId(vc, u'0')
+    print('id_o = ' + str(id_0))
+    touchButton(vc, id_0)
+    touchButton(vc, id_0)
+    touchButton(vc, id_0)
+    touchButton(vc, id_0)
+    id_ok = getViewId(vc, u'OK')
+    print('id_ok = ' + str(id_ok))
+    touchButton(vc, id_ok)
+    
     # Go to main menu
     id_main = getViewId(vc, u'Main menu')
     touchButton(vc, id_main)
