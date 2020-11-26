@@ -39,8 +39,12 @@ def main():
     gDevice = device
     global gViewClient
     gViewClient = vc
+    global gInputType
+    gInputType = int(sys.argv[1])
     
-    print('Start...')
+    
+    print('Start...type: %d'%gInputType)
+
     # first use - Language
     setLanguage()
     # first use - Pin
@@ -98,7 +102,7 @@ def setupMode():
     logging.info('[setupMode] .....end')
     
 def setTimeAndDate():
-    print('set Time and date')
+    print('set Time and date')    
     getViewId(gViewClient, u'Time and date')
     logging.info('[setTimeAndDate] .....start')
     print('set format')
@@ -306,7 +310,7 @@ def setDate():
     year = getDateInfo(gDevice, "date +%Y")
     month = getDateInfo(gDevice, "date +%m")
     day = getDateInfo(gDevice, "date +%d")
-    
+        
     # default check
     if int(year) < 2015 and int(month) < 8:
         year = '2015'
@@ -323,12 +327,20 @@ def setDate():
     else:
         yearRange = int(year) - datetime.datetime.today().year
         increase = 0
+    
+    if gInputType == 1:
+        for i in range(yearRange):
+            if increase == 1:
+                touchPosition(gDevice, 300, 300)
+            else:
+                touchPosition(gDevice, 40, 300)
+    else:
+        for i in range(yearRange):
+            if increase == 1:
+                touchPosition(gDevice, 279, 252)
+            else:
+                touchPosition(gDevice, 40, 252)
 
-    for i in range(yearRange):
-        if increase == 1:
-            touchPosition(gDevice, 300, 300)
-        else:
-            touchPosition(gDevice, 40, 300)
     
     # month comparsion
     print('month')
@@ -340,13 +352,22 @@ def setDate():
     else:
         monthRange = int(month) - datetime.datetime.today().month
         increase = 0
-    for i in range(monthRange):
-        if increase == 1:
-            # + button pressed
-            touchPosition(gDevice, 300, 270)
-        else:
-            # - button pressed
-            touchPosition(gDevice, 40, 270)
+        
+    if gInputType == 1:
+        for i in range(monthRange):
+            if increase == 1:
+                # + button pressed
+                touchPosition(gDevice, 300, 270)
+            else:
+                # - button pressed
+                touchPosition(gDevice, 40, 270)
+    else:
+        for i in range(monthRange):
+            if increase == 1:
+                touchPosition(gDevice, 279, 252)
+            else:
+                touchPosition(gDevice, 40, 252)
+    
 
     # day comparsion
     print('day')
@@ -359,15 +380,23 @@ def setDate():
         dayRange = int(day) - datetime.datetime.today().day
         increase = 0
 
-    for i in range(dayRange):
-        if increase == 1:
-            # + button pressed
-            touchPosition(gDevice, 300, 150)
-        else:
-            # - button pressed
-            touchPosition(gDevice, 40, 150)
-
-
+    if gInputType == 1:
+        for i in range(dayRange):
+            if increase == 1:
+                # + button pressed
+                touchPosition(gDevice, 300, 150)
+            else:
+                # - button pressed
+                touchPosition(gDevice, 40, 150)
+    else:
+        for i in range(dayRange):
+            if increase == 1:
+                # + button pressed
+                touchPosition(gDevice, 279, 252)
+            else:
+                # - button pressed
+                touchPosition(gDevice, 40, 252)
+    
     # footer button pressed
     print('press ok')
     touchButtonByText(gViewClient, u'OK')
@@ -444,7 +473,7 @@ def getViewId(text):
         b = gViewClient.findViewWithTextOrRaise(text)
         return b.getId()
     except:
-        print('[findViewByViewClientWithText] View is not found by text: %s\n', text)
+        print('[findViewByViewClientWithText] View is not found by text: '+ text.encode('utf-8'))
         logging.info('[findViewByViewClientWithText] View is not found by text: ' + text)
         return 0;
 
@@ -454,7 +483,7 @@ def touchButton(id):
         b = gViewClient.findViewByIdOrRaise(id)
         b.touch()
      except:
-        print('[findViewByViewClientWithText] View is not found by id: %d\n',id)
+        print('[findViewByViewClientWithText] View is not found by id: %d'%id)
         logging.info('[findViewByViewClientWithText] View is not found by id: ' + str(id))
      time.sleep(3)
     
@@ -471,7 +500,7 @@ def touchButtonByText(vc, text):
             id = b.getId()
             b.touch()
         except:
-            print('[findViewByViewClientWithText] View is not found by text: %s\n', text)
+            print('[findViewByViewClientWithText] View is not found by text: '+ text.encode('utf-8'))
             logging.info('[findViewByViewClientWithText] View is not found by text: ' + text)
             id = 0
 
@@ -484,7 +513,7 @@ def getViewId(vc, text):
             b = vc.findViewWithTextOrRaise(text)
             id = b.getId()
         except:
-            print('[findViewByViewClientWithText] View is not found by text: %s\n', text)
+            print('[findViewByViewClientWithText] View is not found by text: ' + text.encode('utf-8'))
             logging.info('[findViewByViewClientWithText] View is not found by text: ' + text)
             id = 0
     return id
@@ -494,7 +523,7 @@ def touchButton(vc, id):
         b = vc.findViewByIdOrRaise(id)
         b.touch()
      except:
-        print('[findViewByViewClientWithText] View is not found by id: %d\n',id)
+        print('[findViewByViewClientWithText] View is not found by id: %d'%id)
         logging.info('[findViewByViewClientWithText] View is not found by id: ' + str(id))
 
 def touchPosition(device, x, y):
