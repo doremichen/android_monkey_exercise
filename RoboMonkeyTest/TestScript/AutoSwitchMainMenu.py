@@ -17,20 +17,9 @@ from com.dtmilano.android.viewclient import ViewClient
 ###################################################
 #==================================================
 def main():
-    # config logging
-    # logging.basicConfig(
-    #         level=logging.DEBUG, 
-    #         format='%(asctime)s : %(levelname)s %(message)s',
-    #         datefmt='%Y-%m-%d %H:%M:%S',
-    #         filename='MenualBolus.log',
-    #         filemode='w')
-
-    # logging.info('-------------- Begin --------------')
     # Connects to the current device, returning a MonkeyDevice object
     device = MonkeyRunner.waitForConnection()
     vc = ViewClient(device=device, serialno='0123456789ABCDEF', adb=None)
-    
-    print(sys.getdefaultencoding()) 
     
     value1 = u'Adam!!!'
     
@@ -40,10 +29,10 @@ def main():
     print('input times: %d'%intValue)
     
     for i in range(intValue):
-        # print('count: %d'%i)
+        print('count: %d'%i)
         action(vc, device)
-        # Wait bolus finish
-        checkStandardBolus(vc)
+        # Wait status screen
+        getViewId(vc, u'mg/dL')
     
     print('Finish~~~')
 #==================================================
@@ -55,35 +44,14 @@ def action(vc, device):
     # print('Go to main menu')
     touchPosition(device, 53, 455)
     time.sleep(1)
-    # touchButtonByText(vc, u'Main menu')
-    # print('Go to Bolus')
-    # touchPosition(device, 62, 85)
-    # time.sleep(1)
-    touchButtonByText(vc, u'Bolus')
-    # print('Select manual bolus')
-    # touchPosition(device, 160, 173)
-    # time.sleep(1)
-    touchButtonByText(vc, u'Manual bolus')
-    # print('press total amount')
-    # touchPosition(device, 160, 191)
-    touchButtonByText(vc, u'Total amount')
-    # print('adjust amount value')
-    time.sleep(1)
-    for i in range(12):
-        touchPosition(device, 260, 280)
-    # print('press ok button')
-    touchPosition(device, 300, 450)
-    # print('press Bolus')
-    # time.sleep(1)
-    # touchPosition(device, 300, 450)
-    touchButtonByText(vc, u'Bolus')
-    # print('Deliver insulin')
-    getViewId(vc, u'Deliver insulin')
-    # print('press insulin')
-    device.press('KEYCODE_F10', MonkeyDevice.DOWN_AND_UP)
-    getViewId(vc, u'mg/dL')
-    # print('Return status screen!!!')
-    # logging.info('-------------- End --------------')
+    
+    ## press quickinfo
+    #touchPosition(device, 160, 12)
+    #time.sleep(1)
+    
+    # press Back button
+    device.press('KEYCODE_BACK', MonkeyDevice.DOWN_AND_UP)
+
 
 def getDateInfo(device, cmd):
     value = device.shell(cmd)
@@ -101,7 +69,7 @@ def touchButtonByText(vc, text):
             # logging.info('[findViewByViewClientWithText] View is not found by text: ' + text)
         
 
-def checkStandardBolus(vc):
+def checkStatusScreen(vc):
     while True:
         try:
             vc.dump(window=-1)
