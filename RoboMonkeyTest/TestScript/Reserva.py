@@ -38,50 +38,45 @@ def main():
     time.sleep(1)
     print('unlock pin code')
     id_0 = getViewId(vc, u'0')
-    print('id_o = ' + str(id_0))
-    touchButton(vc, id_0)
-    touchButton(vc, id_0)
-    touchButton(vc, id_0)
-    touchButton(vc, id_0)
-    id_ok = getViewId(vc, u'OK')
-    print('id_ok = ' + str(id_ok))
-    touchButton(vc, id_ok)
+    for i in range(4):
+        touchButtonById(vc, id_0)
+    print('press ok button')
+    touchPosition(device, 160, 455)
     
     # Go to main menu
-    id_main = getViewId(vc, u'Main menu')
-    touchButton(vc, id_main)
+    print('Go to main menu')
+    touchButtonByText(vc, u'Main menu')
     # Replacement
-    id_replace = getViewId(vc, u'Replace')
-    touchButton(vc, id_replace)
+    print('Replacement')
+    touchButtonByText(vc, u'Replace')
     # Select Reservoir
-    id_Reservior = getViewId(vc, u'Reservoir')
-    touchButton(vc, id_Reservior)
+    print('Select Reservoir')
+    touchButtonByText(vc, u'Reservoir')
     # press Replace button
-    id_replace = getViewId(vc, u'Replace')
-    touchButton(vc, id_replace)
+    print('press Replace button')
+    touchButtonByText(vc, u'Replace')
     # press Done button
-    id_done = getViewId(vc, u'Done')
-    touchButton(vc, id_done)
+    print('press Done button')
+    touchButtonByText(vc, u'Done')
     # press Done button
-    id_done = getViewId(vc, u'Done')
-    touchButton(vc, id_done)
+    print('press Done button')
+    touchButtonByText(vc, u'Done')
     # press Save button
-    id_save = getViewId(vc, u'Save')
-    touchButton(vc, id_save)
+    print('press Save button')
+    touchButtonByText(vc, u'Save')
     # press Fill button
-    id_fill = getViewId(vc, u'Fill')
-    touchButton(vc, id_fill)
+    print('press Fill button')
+    touchButtonByText(vc, u'Fill')
     # press OK button
-    id_ok = getViewId(vc, u'OK')
-    touchButton(vc, id_ok)
+    print('press OK button')
+    touchButtonByText(vc, u'OK')
     # press Next button
-    id_next = getViewId(vc, u'Next')
-    touchButton(vc, id_next)
+    print('press Next button')
+    touchButtonByText(vc, u'Next')
     # insulin button pressed
+    print('insulin button pressed')
     getViewId(vc, u'Activate basal rate profile')
     device.press('KEYCODE_F10', MonkeyDevice.DOWN_AND_UP)
-    time.sleep(5)
-    
     print('end!!!')
     logging.info('-------------- End --------------')
 
@@ -101,18 +96,30 @@ def getViewId(vc, text):
             b = vc.findViewWithTextOrRaise(text)
             id = b.getId()
         except:
-            print('[findViewByViewClientWithText] View is not found by text: %s\n', text)
-            logging.info('[findViewByViewClientWithText] View is not found by text: ' + text)
+            print('[getViewId] View is not found by text: ' + text.encode('utf-8'))
+            logging.info('[getViewId] View is not found by text: ' + text)
             id = 0
     return id
 
-def touchButton(vc, id):
+def touchButtonByText(vc, text):
+    while True:
+        try:
+            vc.dump()
+            b = vc.findViewWithTextOrRaise(text)
+            b.touch()
+            break
+        except:
+            print('[touchButtonByText] View is not found by text: ' + text.encode('utf-8'))
+            logging.info('[touchButtonByText] View is not found by text: ' + text)
+
+
+def touchButtonById(vc, id):
      try:
         b = vc.findViewByIdOrRaise(id)
         b.touch()
      except:
-        print('[findViewByViewClientWithText] View is not found by id: %d\n',id)
-        logging.info('[findViewByViewClientWithText] View is not found by id: ' + str(id))
+        print('[touchButtonById] View is not found by id: ' + str(id))
+        logging.info('[touchButtonById] View is not found by id: ' + str(id))
 
 def touchPosition(device, x, y):
     device.touch(x, y, MonkeyDevice.DOWN_AND_UP)
