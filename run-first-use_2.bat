@@ -42,9 +42,7 @@ adb shell input tap 150 150
 adb shell input tap 150 300
 echo %date%-%time% Run FirstUse_2.py
 call monkeyrunner.bat ..\..\RoboMonkeyTest\TestScript\FirstUse_2.py %1
-goto prgStop
 
-:prgStop
 popd
 echo.
 echo =================
