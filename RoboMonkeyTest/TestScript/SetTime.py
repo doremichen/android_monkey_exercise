@@ -30,6 +30,9 @@ def main():
     device = MonkeyRunner.waitForConnection()
     vc = ViewClient(device=device, serialno='0123456789ABCDEF', adb=None)
 
+    text = u'Hello Adam'
+    print("Test: " + text.encode('utf-8'))
+
     print('start!!!')
     device.wake()
     
@@ -38,53 +41,38 @@ def main():
     time.sleep(1)
     print('unlock pin code')
     id_0 = getViewId(vc, u'0')
-    print('id_o = ' + str(id_0))
-    touchButton(vc, id_0)
-    touchButton(vc, id_0)
-    touchButton(vc, id_0)
-    touchButton(vc, id_0)
-    id_ok = getViewId(vc, u'OK')
-    print('id_ok = ' + str(id_ok))
-    touchButton(vc, id_ok)
-    time.sleep(1)
+    for i in range(4):
+        touchButtonById(vc, id_0)
+    touchPosition(device, 160, 455)
+    
     # Go to main menu
-    id_main = getViewId(vc, u'Main menu')
-    touchButton(vc, id_main)
-    time.sleep(1)
+    touchButtonByText(vc, u'Main menu')
+    
     # Settings
-    id_settings = getViewId(vc, u'Settings')
-    touchButton(vc, id_settings)
-    time.sleep(1)
+    touchButtonByText(vc, u'Settings')
+    
     # Time and date
-    id_TimeAndDate = getViewId(vc, u'Time and date')
-    touchButton(vc, id_TimeAndDate)
-    time.sleep(1)
+    touchButtonByText(vc, u'Time and date')
+    
     # set time format
-    id_tf = getViewId(vc, u'Time format')
-    touchButton(vc, id_tf)
-    time.sleep(1)
-    setFormat(vc)
-    time.sleep(1)
+    touchButtonByText(vc, u'Time format')
+    setFormat(vc, device)
+    #time.sleep(1)
     # set date
-    id_setDate = getViewId(vc, u'Date')
-    touchButton(vc, id_setDate)
-    time.sleep(1)
+    touchButtonByText(vc, u'Date')
     setDate(device)
-    time.sleep(1)
+    #time.sleep(1)
     # set time
-    id_setTime = getViewId(vc, u'Time')
-    touchButton(vc, id_setTime)
-    time.sleep(1)
+    touchButtonByText(vc, u'Time')
     setTime(device)
-    time.sleep(1)
+    #time.sleep(1)
     # press OK button
-    id_ok = getViewId(vc, u'OK')
-    touchButton(vc, id_ok)
+    touchPosition(device, 160, 455)
+    
     # Go to status screen
-    getViewId(vc, u'Settings')
-    device.press('KEYCODE_BACK', MonkeyDevice.DOWN_AND_UP)
-    time.sleep(1)
-    device.press('KEYCODE_BACK', MonkeyDevice.DOWN_AND_UP)
+    checkScreen(vc, u'Settings')
+    touchBackButton(device)
+    touchBackButton(device)
     print('end!!!')
     logging.info('-------------- End --------------')
 
@@ -92,13 +80,14 @@ def main():
 ###################################################
 # Function
 ###################################################
-def setFormat(vc):
-    id_24 = getViewId(vc, u'24 hour')
-    touchButton(vc, id_24)
-    id_Save = getViewId(vc, u'Save')
-    touchButton(vc, id_Save)
+def setFormat(vc, device):
+    touchButtonByText(vc, u'24 hour')
+    touchPosition(device, 160, 455)
+    #id_24 = getViewId(vc, u'24 hour')
+    #touchButtonById(vc, id_24)
+    #id_Save = getViewId(vc, u'Save')
+    #touchButtonById(vc, id_Save)
     
-
 
 def setTime(device):
     
@@ -107,36 +96,40 @@ def setTime(device):
     hour = getDateInfo(device, "date +%H")
     if int(hour) < datetime.datetime.today().hour:
         hourRange = datetime.datetime.today().hour - int(hour)
-        increase = 1
+        isAdd = True
     else:
         hourRange = int(hour) - datetime.datetime.today().hour
-        increase = 0
+        isAdd = False
+    print("hour: " + hour)
+    print("pc: " + str(datetime.datetime.today().hour))
+    print("hourRange: %d" % hourRange)
     for i in range(hourRange):
-        if increase == 1:
+        if isAdd == True:
             touchPosition(device, 280, 250)
-        elif increase == 0:
+        else:
             touchPosition(device, 50, 250)
-    time.sleep(1)
     # minute comparsion
     touchPosition(device, 180, 220)
     min = getDateInfo(device, "date +%M")
     if int(min) < datetime.datetime.today().minute:
         minRange = datetime.datetime.today().minute - int(min)
-        increase = 1
+        isAdd = True
     else:
         minRange = int(min) - datetime.datetime.today().minute
-        increase = 0
+        isAdd = False
+    print("min: " + min)
+    print("pc: " + str(datetime.datetime.today().minute))
+    print("minRange: %d" % minRange)
     for i in range(minRange):
-        if increase == 1:
+        print("i: %d" % i)
+        if isAdd == True:
             touchPosition(device, 280, 250)
-        elif increase == 0:
+        else:
             touchPosition(device, 50, 250)
-    time.sleep(1)
     # footer button pressed
     touchPosition(device, 20, 450)
 
 def setDate(device):
-
     # month
     touchPosition(device, 160, 220)
     month = getDateInfo(device, "date +%m")
@@ -196,6 +189,32 @@ def setDate(device):
 def getDateInfo(device, cmd):
     value = device.shell(cmd)
     return value.encode('utf-8')
+    
+def touchBackButton(device, delay=1):
+    device.press('KEYCODE_BACK', MonkeyDevice.DOWN_AND_UP)
+    time.sleep(delay)
+
+def touchButtonByText(vc, text, delay=1):
+    while True:
+        try:
+            vc.dump()
+            b = vc.findViewWithTextOrRaise(text)
+            b.touch()
+            break
+        except:
+            print('[touchButtonByText] View is not found by text: ' + text.encode('utf-8'))
+            logging.info('[touchButtonByText] View is not found by text: ' + text)
+    time.sleep(delay)
+
+def checkScreen(vc, text):
+    while True:
+        try:
+            vc.dump()
+            vc.findViewWithTextOrRaise(text)
+            break
+        except:
+            print('[checkScreen] View is not found by text: ' + text.encode('utf-8'))
+            logging.info('[checkScreen] View is not found by text: ' + text)
 
 def getViewId(vc, text):
     id = 0
@@ -205,18 +224,18 @@ def getViewId(vc, text):
             b = vc.findViewWithTextOrRaise(text)
             id = b.getId()
         except:
-            print('[findViewByViewClientWithText] View is not found by text: %s\n', text)
-            logging.info('[findViewByViewClientWithText] View is not found by text: ' + text)
+            print('[getViewId] View is not found by text: ' + text.encode('utf-8'))
+            logging.info('[getViewId] View is not found by text: ' + text)
             id = 0
     return id
 
-def touchButton(vc, id):
+def touchButtonById(vc, id):
      try:
         b = vc.findViewByIdOrRaise(id)
         b.touch()
      except:
-        print('[findViewByViewClientWithText] View is not found by id: %d\n',id)
-        logging.info('[findViewByViewClientWithText] View is not found by id: ' + str(id))
+        print('[touchButtonById] View is not found by id: %d\n',id)
+        logging.info('[touchButtonById] View is not found by id: ' + str(id))
 
 def touchPosition(device, x, y, delay=1):
     device.touch(x, y, MonkeyDevice.DOWN_AND_UP)
