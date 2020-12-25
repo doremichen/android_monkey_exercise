@@ -28,6 +28,12 @@ echo     First-Use_2
 echo =================
 echo.
 
+::: wate for adb
+adb wait-for-device
+
+::: Wake up device
+:::adb shell input keyevent KEYCODE_POWER
+
 echo =================
 echo Start to auto-run
 echo =================
@@ -49,4 +55,4 @@ echo =================
 echo End of program
 echo =================
 echo.
-pause
+echo.&pause&goto:eof
