@@ -6,14 +6,14 @@ GOTO START
    echo =================
    echo Usage:
    echo.
-   echo     run-first-use_2.bat inputType
+   echo     run-first-use_2.bat inputType sim_serial_number
    echo        inputType:
    echo              1. FC5.X
    echo              2. FC4.2
    echo.
    echo Example:
    echo.
-   echo     run-first-use_2.bat 1
+   echo     run-first-use_2.bat 1 17841784
    echo =================
    
    pause
@@ -21,6 +21,7 @@ GOTO START
  
 :START
    if [%1]==[] GOTO USAGE
+   if [%2]==[] GOTO USAGE
 
 
 echo =================
@@ -47,7 +48,7 @@ adb shell input tap 200 150
 adb shell input tap 150 150
 adb shell input tap 150 300
 echo %date%-%time% Run FirstUse_2.py
-call monkeyrunner.bat ..\..\RoboMonkeyTest\TestScript\FirstUse_2.py %1
+call monkeyrunner.bat ..\..\RoboMonkeyTest\TestScript\FirstUse_2.py %1 %2
 
 popd
 echo.

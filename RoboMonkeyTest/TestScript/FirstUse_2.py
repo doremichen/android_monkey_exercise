@@ -38,8 +38,11 @@ def main():
     global gInputType
     gInputType = int(sys.argv[1])
     
+    sim_SN = sys.argv[2]
+    
     
     print('Start...type: %d'%gInputType)
+    print('sim_SN: ' + sim_SN.encode('utf-8'))
 
     # first use - Language
     setLanguage(vc, device)
@@ -58,7 +61,7 @@ def main():
     # first use - Set basal rate profile
     setBasalRateProfile(vc, device)
     # first use - MP pairing
-    mpPairing(vc, device)
+    mpPairing(vc, device, "GW" + sim_SN)
     print('End...')
     logging.info('-------------- FirstUse_1 End --------------')
 
@@ -257,7 +260,7 @@ def setBasalRateProfile(vc, device):
     time.sleep(1)
     logging.info('[setBasalRateProfile] .....end')
 
-def mpPairing(vc, device):
+def mpPairing(vc, device, simSN):
     print('mp pairing')
     logging.info('[mpPairing] .....start')
     # confirm infomation dialog 1
@@ -273,7 +276,7 @@ def mpPairing(vc, device):
     # select pair pump type
     touchButtonByText(vc, u'Enter pump key')
     # select mp
-    touchButtonByText(vc, u'GW14871487')
+    touchButtonByText(vc, simSN)
     # input pin number
     print('input pin number')
     getViewId(vc, u'Enter pump key')
