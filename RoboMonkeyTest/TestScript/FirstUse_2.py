@@ -304,9 +304,14 @@ def setDate(vc, device):
     # id/no_id/30 -> year
         
     # default check
-    year = '2015'
-    month = '9'
-    day = '1'
+    if gInputType == 1:
+        year = '2015'
+        month = '9'
+        day = '1'
+    else:
+        year = '2015'
+        month = '8'
+        day = '31'
     
     # year comparsion
     print('year')

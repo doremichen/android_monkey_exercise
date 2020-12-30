@@ -29,6 +29,10 @@ def main():
     # Connects to the current device, returning a MonkeyDevice object
     device = MonkeyRunner.waitForConnection()
     vc = ViewClient(device=device, serialno='0123456789ABCDEF', adb=None)
+    
+    sim_SN = sys.argv[1]
+    
+    print('sim_SN: ' + sim_SN.encode('utf-8'))
 
     print('start!!!')
     device.wake()
@@ -39,14 +43,20 @@ def main():
     print('unlock pin code')
     id_0 = getViewId(vc, u'0')
     print('id_o = ' + str(id_0))
-    touchButton(vc, id_0)
-    touchButton(vc, id_0)
-    touchButton(vc, id_0)
-    touchButton(vc, id_0)
-    id_ok = getViewId(vc, u'OK')
-    print('id_ok = ' + str(id_ok))
-    touchButton(vc, id_ok)
+    for i in range(4):
+        touchButton(vc, id_0)
+    touchButtonByText(vc, u'OK')
     
+    mpr(vc, device, "GW" + sim_SN)
+    
+    print('end!!!')
+    logging.info('-------------- End --------------')
+
+#==================================================
+###################################################
+# Function
+###################################################
+def mpr(vc, device, simSN):
     print('Go to main menu')
     touchButtonByText(vc, u'Main menu')
     print('Go to Replacement')
@@ -59,8 +69,6 @@ def main():
     touchButtonByText(vc, u'Yes')
     print('press Done button of sidpose system component info')
     touchButtonByText(vc, u'Done')
-    print('press ok button of w85')
-    touchButtonByText(vc, u'OK')
     print('press Done button of prepare micropump')
     touchButtonByText(vc, u'Done')
     print('press save button of reservior amount')
@@ -70,7 +78,7 @@ def main():
     print('select enter pump keys')
     touchButtonByText(vc, u'Enter pump key')
     print('select pump serial number')
-    touchButtonByText(vc, u'GW11111111')
+    touchButtonByText(vc, simSN)
     # input pin number
     print('input pin number')
     getViewId(vc, u'Enter pump key')
@@ -91,29 +99,32 @@ def main():
     device.press('KEYCODE_F10', MonkeyDevice.DOWN_AND_UP)
     time.sleep(5)
     
-    print('end!!!')
-    logging.info('-------------- End --------------')
-
-#==================================================
-###################################################
-# Function
-###################################################
+def isW85(vc):
+    try:
+        vc.dump(window=-1)
+        vc.findViewWithTextOrRaise(u'W-85')
+        return True
+    except:
+        print('No W-85')
+        return False
+    
 def getDateInfo(device, cmd):
     value = device.shell(cmd)
     return value.encode('utf-8')
 
 def touchButtonByText(vc, text):
-    id = 0
-    while id == 0:
+    while True:
         try:
             vc.dump(window=-1)
             b = vc.findViewWithTextOrRaise(text)
-            id = b.getId()
             b.touch()
+            break
         except:
-            print('[findViewByViewClientWithText] View is not found by text: %s\n', text)
-            logging.info('[findViewByViewClientWithText] View is not found by text: ' + text)
-            id = 0
+            print('[touchButtonByText] View is not found by text: ' + text.encode('utf-8'))
+            logging.info('[touchButtonByText] View is not found by text: ' + text)
+            if isW85(vc) == True:
+                # press Ok
+                touchButtonByText(vc, u'OK')
 
 
 def getViewId(vc, text):
@@ -124,8 +135,8 @@ def getViewId(vc, text):
             b = vc.findViewWithTextOrRaise(text)
             id = b.getId()
         except:
-            print('[findViewByViewClientWithText] View is not found by text: %s\n', text)
-            logging.info('[findViewByViewClientWithText] View is not found by text: ' + text)
+            print('[getViewId] View is not found by text: ' + text.encode('utf-8'))
+            logging.info('[getViewId] View is not found by text: ' + text)
             id = 0
     return id
 
@@ -134,12 +145,12 @@ def touchButton(vc, id):
         b = vc.findViewByIdOrRaise(id)
         b.touch()
      except:
-        print('[findViewByViewClientWithText] View is not found by id: %d\n',id)
-        logging.info('[findViewByViewClientWithText] View is not found by id: ' + str(id))
+        print('[touchButton] View is not found by id: ' + str(id))
+        logging.info('[touchButton] View is not found by id: ' + str(id))
 
-def touchPosition(device, x, y):
+def touchPosition(device, x, y, delay=1):
     device.touch(x, y, MonkeyDevice.DOWN_AND_UP)
-    time.sleep(1)
+    time.sleep(delay)
 
 if __name__ == '__main__':
     main()
