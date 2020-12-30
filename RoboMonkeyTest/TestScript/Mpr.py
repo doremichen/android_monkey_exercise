@@ -141,10 +141,10 @@ def getViewId(vc, text):
     return id
 
 def touchButton(vc, id):
-     try:
-        b = vc.findViewByIdOrRaise(id)
-        b.touch()
-     except:
+    try:
+       b = vc.findViewByIdOrRaise(id)
+       b.touch()
+    except:
         print('[touchButton] View is not found by id: ' + str(id))
         logging.info('[touchButton] View is not found by id: ' + str(id))
 
