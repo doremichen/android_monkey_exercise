@@ -323,11 +323,10 @@ def setDate(vc, device):
     print('yearRange: %d' % yearRange)
     
     if gInputType == 1:
-        for i in range(yearRange):
-            touchPosition(device, 300, 300)
+        pressPickerButton(device, 300, 300, yearRange)
+
     else:
-        for i in range(yearRange):
-            touchPosition(device, 279, 252)
+        pressPickerButton(device, 279, 252, yearRange)
 
     # month comparsion
     print('month')
@@ -339,12 +338,17 @@ def setDate(vc, device):
     print('monthRange: %d' % monthRange)
     
     if gInputType == 1:
-        for i in range(monthRange):
-            # + button pressed
-            touchPosition(device, 300, 270)
+    
+        if monthRange >= 0:
+            pressPickerButton(device, 300, 270, monthRange)
+        else:
+            pressPickerButton(device, 40, 270, abs(monthRange))
+        
     else:
-        for i in range(monthRange):
-            touchPosition(device, 279, 252)
+        if monthRange >= 0:
+            pressPickerButton(device, 279, 252, monthRange)
+        else:
+            pressPickerButton(device, 40, 252, abs(monthRange))
     
 
     # day comparsion
@@ -357,13 +361,15 @@ def setDate(vc, device):
     print('dayRange: %d' % dayRange)
 
     if gInputType == 1:
-        for i in range(dayRange):
-            # + button pressed
-            touchPosition(device, 300, 150)
+        if dayRange >= 0:
+            pressPickerButton(device, 300, 150, dayRange)
+        else:
+            pressPickerButton(device, 40, 150, abs(dayRange))
     else:
-        for i in range(dayRange):
-            # + button pressed
-            touchPosition(device, 279, 252)
+        if dayRange >= 0:
+            pressPickerButton(device, 279, 252, dayRange)
+        else:
+            pressPickerButton(device, 40, 252, dayRange)
     
     # footer button pressed
     print('press ok')
@@ -437,6 +443,9 @@ def touchPosition(device, x, y, delay=1):
     device.touch(x, y, MonkeyDevice.DOWN_AND_UP)
     time.sleep(delay)
 
+def pressPickerButton(device, x, y, times):
+    for i in range(times):
+        touchPosition(device, x, y)
 
 if __name__ == '__main__':
     main()
