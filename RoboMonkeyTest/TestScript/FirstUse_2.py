@@ -369,7 +369,7 @@ def setDate(vc, device):
         if dayRange >= 0:
             pressPickerButton(device, 279, 252, dayRange)
         else:
-            pressPickerButton(device, 40, 252, dayRange)
+            pressPickerButton(device, 40, 252, abs(dayRange))
     
     # footer button pressed
     print('press ok')
