@@ -39,7 +39,7 @@ def main():
         action(vc, device)
         # press power button
         deviceCmd(device, 'input keyevent KEYCODE_POWER')
-        time.sleep(3)
+        time.sleep(5)
     
     print('end!!!')
     logging.info('-------------- End --------------')
