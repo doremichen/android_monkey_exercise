@@ -93,96 +93,95 @@ def setTime(device):
     
     # hour comparsion
     touchPosition(device, 100, 220)
-    hour = getDateInfo(device, "date +%H")
-    if int(hour) < datetime.datetime.today().hour:
-        hourRange = datetime.datetime.today().hour - int(hour)
-        isAdd = True
-    else:
-        hourRange = int(hour) - datetime.datetime.today().hour
-        isAdd = False
-    print("hour: " + hour)
-    print("pc: " + str(datetime.datetime.today().hour))
-    print("hourRange: %d" % hourRange)
-    for i in range(hourRange):
-        if isAdd == True:
-            touchPosition(device, 280, 250)
-        else:
+    dev_hour = getDateInfo(device, "date +%H")
+    pc_hour = datetime.datetime.today().hour
+    diff_hour = int(dev_hour) - pc_hour
+    
+    print("diff_hour: " + str(diff_hour))
+    
+    if diff_hour > 0:
+        # press "-" button
+        for i in range(diff_hour):
             touchPosition(device, 50, 250)
+    elif diff_hour < 0:
+        # press "+" button
+        for i in range(abs(diff_hour)):
+            touchPosition(device, 280, 250)
+    
     # minute comparsion
     touchPosition(device, 180, 220)
-    min = getDateInfo(device, "date +%M")
-    if int(min) < datetime.datetime.today().minute:
-        minRange = datetime.datetime.today().minute - int(min)
-        isAdd = True
-    else:
-        minRange = int(min) - datetime.datetime.today().minute
-        isAdd = False
-    print("min: " + min)
-    print("pc: " + str(datetime.datetime.today().minute))
-    print("minRange: %d" % minRange)
-    for i in range(minRange):
-        print("i: %d" % i)
-        if isAdd == True:
-            touchPosition(device, 280, 250)
-        else:
+    dev_min = getDateInfo(device, "date +%M")
+    pc_min = datetime.datetime.today().minute
+    diff_min = int(dev_min) - pc_min
+    
+    print("pc_min: " + str(pc_min))
+    print("dev_min: " + dev_min)
+    print("diff_min: " + str(diff_min))
+    
+    if diff_min > 0:
+        # press "-" button
+        for i in range(diff_min):
             touchPosition(device, 50, 250)
+    elif diff_min < 0:
+        # press "+" button
+        for i in range(abs(diff_min)):
+            touchPosition(device, 280, 250)
+            
     # footer button pressed
     touchPosition(device, 20, 450)
 
 def setDate(device):
     # month
     touchPosition(device, 160, 220)
-    month = getDateInfo(device, "date +%m")
-    if int(month) < datetime.datetime.today().month:
-        monthRange = datetime.datetime.today().month - int(month)
-        increase = 1
-    else:
-        monthRange = int(month) - datetime.datetime.today().month
-        increase = 0
-    for i in range(monthRange):
-        if increase == 1:
-            # + button pressed
-            touchPosition(device, 280, 230)
-        else:
+    dev_month = getDateInfo(device, "date +%m")
+    pc_month = datetime.datetime.today().month
+    dff_month = int(dev_month) - pc_month
+    
+    print("dff_month: " + str(dff_month))
+    
+    if dff_month > 0:
+        for i in range(dff_month):
             # - button pressed
-            touchPosition(device, 40, 230)
+            touchPosition(device, 40, 220)
+    elif dff_month < 0:
+        for i in range(abs(dff_month)):
+            # + button pressed
+            touchPosition(device, 280, 220)
             
     # day comparsion
     touchPosition(device, 160, 140)
-    day = getDateInfo(device, "date +%d")
-    if int(day) < datetime.datetime.today().day:
-        dayRange = datetime.datetime.today().day - int(day)
-        increase = 1
-    else:
-        dayRange = int(day) - datetime.datetime.today().day
-        increase = 0
-        
-    # FC5.1
-    for i in range(dayRange):
-        if increase == 1:
-            # + button pressed
-            touchPosition(device, 280, 140)
-        else:
+    dev_day = getDateInfo(device, "date +%d")
+    pc_day = datetime.datetime.today().day
+    dff_day = int(dev_day) - pc_day
+    
+    print("dff_day: " + str(dff_day))
+    
+    if dff_day > 0:
+        for i in range(dff_day):
             # - button pressed
             touchPosition(device, 40, 140)
-    
+    elif dff_day < 0:
+        for i in range(abs(dff_day)):
+            # + button pressed
+            touchPosition(device, 280, 140)
+            
     # year comparsion
     touchPosition(device, 160, 300)
-    year = getDateInfo(device, "date +%Y")
-    if int(year) < datetime.datetime.today().year:
-        yearRange = datetime.datetime.today().year - int(year)
-        increase = 1
-    else:
-        yearRange = int(year) - datetime.datetime.today().year
-        increase = 0
+    dev_year = getDateInfo(device, "date +%Y")
+    pc_year = datetime.datetime.today().year
+    dff_year = int(dev_year) - pc_year
     
-    # FC5.1
-    for i in range(yearRange):
-        if increase == 1:
-            touchPosition(device, 280, 300)
-        else:
+    print("dff_year: " + str(dff_year))
+    
+    if dff_year > 0:
+        for i in range(dff_year):
+            # - button pressed
             touchPosition(device, 20, 300)
-    
+    elif dff_year < 0:
+        for i in range(abs(dff_year)):
+            # + button pressed
+            touchPosition(device, 280, 300)
+
     # footer button pressed
     touchPosition(device, 160, 455)
 
@@ -234,7 +233,7 @@ def touchButtonById(vc, id):
         b = vc.findViewByIdOrRaise(id)
         b.touch()
      except:
-        print('[touchButtonById] View is not found by id: %d\n',id)
+        print('[touchButtonById] View is not found by id: ' + str(id))
         logging.info('[touchButtonById] View is not found by id: ' + str(id))
 
 def touchPosition(device, x, y, delay=1):
